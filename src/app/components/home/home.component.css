@@ -1,0 +1,35 @@
+.search-form{
+    display:flex;
+    width:100%;
+    justify-content: center;
+    align-items: center;
+    padding:0.4cm 0 0.4cm 0;
+    gap:0.1cm;
+}
+.search-textbox{
+    height:1cm;
+    border-radius: 0.1cm;
+    border-color:#e7e7e7;
+}
+.search-button{
+    height:1.1cm;
+    width:2cm;
+    border-radius: 0.1cm;
+}
+.search-movie-poster{
+    height:3cm;
+    margin-top:6px;
+}
+.movies-search-table{
+    min-width: 0;
+    width:90%;
+    background-color: #e7e7e7;
+    border-radius: 0.2cm;
+    overflow:hidden;
+}
+.movie-table-container{
+    width: 100%;
+    display: grid;
+    place-items: center;
+    min-height: 70vh;
+}

@@ -1,0 +1,43 @@
+<header></header>
+<div class="main">
+    <form (ngSubmit)="onSubmitSearch()" class="search-form">
+        <input [(ngModel)]="searchTerm" type="text" name="search" id="search-text" class="search-textbox" placeholder="Search Movie Name">
+        <input type="submit" value="Search" class="search-button">
+    </form>
+    <div class="movie-table-container">
+    <mat-spinner *ngIf="showSearchSpinner"></mat-spinner>
+    <table *ngIf="showMoviesTable" mat-table [dataSource]="moviesList" class="movies-search-table">
+
+        <!--- Note that these columns can be defined in any order.
+              The actual rendered columns are set as a property on the row definition" -->
+      
+        <!-- Position Column -->
+        <ng-container matColumnDef="Poster">
+          <th mat-header-cell *matHeaderCellDef> Poster </th>
+          <td mat-cell *matCellDef="let element"> <img class="search-movie-poster" [src]="element.Poster" alt="Movie Poster">  </td>
+        </ng-container>
+      
+        <!-- Name Column -->
+        <ng-container matColumnDef="Title">
+          <th mat-header-cell *matHeaderCellDef> Title </th>
+          <td mat-cell *matCellDef="let element"> {{element.Title}} </td>
+        </ng-container>
+      
+        <!-- Weight Column -->
+        <ng-container matColumnDef="Year">
+          <th mat-header-cell *matHeaderCellDef> Year </th>
+          <td mat-cell *matCellDef="let element"> {{element.Year}} </td>
+        </ng-container>
+      
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="Type">
+          <th mat-header-cell *matHeaderCellDef> Type </th>
+          <td mat-cell *matCellDef="let element"> {{element.Type}} </td>
+        </ng-container>
+      
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+</div>
+<footer></footer>
