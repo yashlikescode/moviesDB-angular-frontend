@@ -33,7 +33,7 @@ export class HomeComponent {
     this.showMoviesTable = false;
     this.showSearchSpinner = true;
     this.http
-      .get('https://node.yashlikescode.in/api/movie-search-by-name', {
+      .get('https://node-backend-7q02.onrender.com/api/movie-search-by-name', {
         params: { s: this.searchTerm, page: 1 },
       })
       .subscribe({
