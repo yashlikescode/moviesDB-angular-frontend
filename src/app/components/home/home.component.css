@@ -48,3 +48,16 @@
 .movie-row:active {
     background-color: #e7e7e7;
 }
+
+.add-icon{
+    width: 1cm;
+    height: 1cm;
+    fill: grey;
+}
+.add-icon:hover {
+    fill: rgb(65, 65, 65);
+}
+
+.add-icon:active {
+    fill: rgb(34, 33, 33);
+}
