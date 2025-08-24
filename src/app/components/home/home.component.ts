@@ -7,6 +7,26 @@ import { MatSnackBar,MatSnackBarVerticalPosition, } from '@angular/material/snac
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CapitalizeFirstPipe } from '../capitalizeFirst.pipe copy';
 import { RemoveTrailingDashesPipe } from '../removeDashes.pipe';
+import { CollectionService } from '../../collection.service';
+import {ChangeDetectionStrategy, model, signal} from '@angular/core';
+import {MatButtonModule} from '@angular/material/button';
+import {
+  MatDialog,
+  MatDialogActions,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+  MatDialogClose,
+} from '@angular/material/dialog';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+interface Row {
+  collection_name: string;
+}
+
+import {MatIconModule} from '@angular/material/icon';
+import {MatDividerModule} from '@angular/material/divider';
+
 
 @Component({
   standalone: true,
@@ -19,6 +39,14 @@ import { RemoveTrailingDashesPipe } from '../removeDashes.pipe';
     MatProgressSpinnerModule,
     RemoveTrailingDashesPipe,
     CapitalizeFirstPipe,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule,
+    MatButtonModule,
+    MatDialogTitle,
+    MatDialogContent,
+    MatDialogActions,MatButtonModule, MatDividerModule, MatIconModule
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
@@ -30,8 +58,11 @@ export class HomeComponent implements OnInit{
   showMoviesTable: boolean = false;
   showSearchSpinner:boolean = false;
   searchTerm: string = '';
+  isAddMovieModalOpen: boolean = false;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private collectionService: CollectionService) {}
+
+  collectionsList: string[] = [];
 
     ngOnInit() {
     const savedValue = localStorage.getItem('searchTerm');
@@ -46,6 +77,22 @@ export class HomeComponent implements OnInit{
     const movieId = row.imdbID;
     window.location.href = `/movie/${movieId}`;
   }
+  addToCollection(movie: any) {
+    this.collectionService.getCollectionsListById('1111').subscribe({
+      next: (data) => {
+        this.collectionsList = data.rows.map(((row: Row) => row.collection_name));
+        this.isAddMovieModalOpen = true;
+      },
+      error: (err) => {
+        console.error('Error fetching user collections:', err);
+      },
+    });
+  }
+  
+  readonly dialog = inject(MatDialog);
+openMovieAddDialog(movie:any) {
+}
+
   onSubmitSearch() {
     this.showMoviesTable = false;
     this.showSearchSpinner = true;
