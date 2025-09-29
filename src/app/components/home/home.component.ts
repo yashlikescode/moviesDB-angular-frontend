@@ -11,6 +11,8 @@ import { RemoveTrailingDashesPipe } from '../removeDashes.pipe';
 import { CollectionService } from '../../collection.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
+import { forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 interface Movie {
   imdbID: string;
@@ -118,14 +120,61 @@ export class HomeComponent implements OnInit {
     console.log('Selected Collections:', this.selectedCollections);
   }
 
-  addToSelectedCollections() {
-    if (this.movieInAddPopup && this.selectedCollections.length > 0) {
-      console.log('Adding movie', this.movieInAddPopup, 'to collections:', this.selectedCollections);
-      // Add your API call here
+addToSelectedCollections() {
+    if (!this.movieInAddPopup || this.selectedCollections.length === 0) {
+      return;
+    }
+
+    const userId = '1111'; // keep same user id you used elsewhere, or replace with real logged-in id
+
+    // map movie from OMDB shape to your backend expected fields
+    const moviePayload = {
+      imdb_id: this.movieInAddPopup.imdbID,
+      movie_name: this.movieInAddPopup.Title,
+      movie_type: this.movieInAddPopup.Type,
+      movie_year: this.movieInAddPopup.Year,
+      movie_genre: null,
+      movie_poster_link: this.movieInAddPopup.Poster
+    };
+
+    // create an Observable for each selected collection
+    const requests = this.selectedCollections.map((collectionName) =>
+      this.collectionService.addMovieToCollection(userId, collectionName, moviePayload).pipe(
+        // convert any error into a success object that signals failure so forkJoin won't error-out
+        catchError(err => of({ error: true, collectionName, err }))
+      )
+    );
+
+    // run them in parallel
+    forkJoin(requests).subscribe((results: any[]) => {
+      const successes = results.filter(r => !r || !r.error);
+      const failures = results.filter(r => r && r.error);
+
+      if (successes.length > 0) {
+        this._snackBar.open(`${successes.length} added to collection${successes.length > 1 ? 's' : ''}`, 'OK', { duration: 3000, verticalPosition: this.verticalPosition });
+      }
+
+      if (failures.length > 0) {
+        // try to give actionable messages (e.g., 409 duplicate)
+        const msgs = failures.map(f => {
+          const status = f.err?.status;
+          if (status === 409) return `${f.collectionName}: already exists`;
+          return `${f.collectionName}: failed`;
+        });
+        this._snackBar.open(`Failed: ${msgs.join('; ')}`, 'OK', { duration: 6000, verticalPosition: this.verticalPosition });
+      }
+
+      // close modal and reset selection
       this.isAddMovieModalOpen = false;
       this.selectedCollections = [];
       this.newCollectionName = '';
-    }
+    }, (err) => {
+      console.error('Unexpected error adding movies to collections', err);
+      this._snackBar.open('Unexpected error occurred', 'OK', { duration: 4000, verticalPosition: this.verticalPosition });
+      this.isAddMovieModalOpen = false;
+      this.selectedCollections = [];
+      this.newCollectionName = '';
+    });
   }
 
   onSubmitSearch() {
