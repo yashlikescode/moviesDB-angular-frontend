@@ -1,5 +1,37 @@
-<form action="" class="login-form">
-    <input type="text" name="username" id="username">
-    <input type="password" name="password" id="password">
-    <input type="submit" value="Login">
-</form>
+<section class="auth-shell">
+  <form class="auth-card" (ngSubmit)="onSubmit()">
+    <h1>Login</h1>
+
+    <p class="info" *ngIf="infoMessage">{{ infoMessage }}</p>
+    <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+    <label for="username">Username</label>
+    <input
+      id="username"
+      name="username"
+      type="text"
+      [(ngModel)]="username"
+      placeholder="john"
+      required
+    />
+
+    <label for="password">Password</label>
+    <input
+      id="password"
+      name="password"
+      type="password"
+      [(ngModel)]="password"
+      placeholder="Enter your password"
+      required
+    />
+
+    <button type="submit" [disabled]="isSubmitting">
+      {{ isSubmitting ? "Logging in..." : "Login" }}
+    </button>
+
+    <p class="switch-link">
+      New user?
+      <a routerLink="/register">Create an account</a>
+    </p>
+  </form>
+</section>

@@ -1,1 +1,109 @@
-<p>register works!</p>
+<section class="auth-shell">
+  <form class="auth-card" (ngSubmit)="onSubmit()">
+    <h1>Create Account</h1>
+
+    <p class="success" *ngIf="successMessage">{{ successMessage }}</p>
+    <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+    <label for="username">Username</label>
+    <div class="field-row">
+      <input
+        id="username"
+        name="username"
+        type="text"
+        [(ngModel)]="username"
+        (ngModelChange)="onUsernameChange($event)"
+        placeholder="john"
+        required
+      />
+      <span
+        class="status-dot status-available"
+        *ngIf="usernameStatus === 'available'"
+        title="Username is available"
+      ></span>
+      <span
+        class="status-dot status-taken"
+        *ngIf="usernameStatus === 'taken' || usernameStatus === 'invalid'"
+        title="Username is not available"
+      ></span>
+    </div>
+    <p class="hint" *ngIf="usernameStatus === 'checking'">
+      Checking username...
+    </p>
+    <p class="hint success" *ngIf="usernameStatus === 'available'">
+      Username is available.
+    </p>
+    <p class="hint error" *ngIf="usernameStatus === 'taken'">
+      Username already exists.
+    </p>
+
+    <label for="email">Email</label>
+    <div class="field-row">
+      <input
+        id="email"
+        name="email"
+        type="email"
+        [(ngModel)]="email"
+        (ngModelChange)="onEmailChange($event)"
+        placeholder="john@example.com"
+        required
+      />
+      <span
+        class="status-dot status-available"
+        *ngIf="emailStatus === 'available'"
+        title="Email is available"
+      ></span>
+      <span
+        class="status-dot status-taken"
+        *ngIf="emailStatus === 'taken' || emailStatus === 'invalid'"
+        title="Email is not available"
+      ></span>
+    </div>
+    <p class="hint" *ngIf="emailStatus === 'checking'">Checking email...</p>
+    <p class="hint success" *ngIf="emailStatus === 'available'">
+      Email is available.
+    </p>
+    <p class="hint error" *ngIf="emailStatus === 'taken'">
+      Email already exists.
+    </p>
+    <p class="hint error" *ngIf="emailStatus === 'invalid'">
+      Enter a valid email format.
+    </p>
+
+    <label for="password">Password</label>
+    <input
+      id="password"
+      name="password"
+      type="password"
+      [(ngModel)]="password"
+      placeholder="Enter password"
+      required
+    />
+
+    <label for="confirmPassword">Confirm Password</label>
+    <input
+      id="confirmPassword"
+      name="confirmPassword"
+      type="password"
+      [(ngModel)]="confirmPassword"
+      placeholder="Confirm password"
+      required
+    />
+
+    <button
+      type="submit"
+      [disabled]="
+        isSubmitting ||
+        usernameStatus !== 'available' ||
+        emailStatus !== 'available'
+      "
+    >
+      {{ isSubmitting ? "Creating..." : "Sign Up" }}
+    </button>
+
+    <p class="switch-link">
+      Already have an account?
+      <a routerLink="/login">Login</a>
+    </p>
+  </form>
+</section>

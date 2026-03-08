@@ -1,61 +1,107 @@
 <div class="main">
-    <form (ngSubmit)="onSubmitSearch()" class="search-form">
-        <input [(ngModel)]="searchTerm" (ngModelChange)="setSearchTerm()" type="text" name="search" id="search-text" class="search-textbox" placeholder="Search Movie Name">
-        <input type="submit" value="Search" class="search-button">
-    </form>
-    <div class="movie-table-container">
+  <form (ngSubmit)="onSubmitSearch()" class="search-form">
+    <input
+      [(ngModel)]="searchTerm"
+      (ngModelChange)="setSearchTerm()"
+      type="text"
+      name="search"
+      id="search-text"
+      class="search-textbox"
+      placeholder="Search Movie Name"
+    />
+    <input type="submit" value="Search" class="search-button" />
+  </form>
+  <div class="movie-table-container">
     <mat-spinner *ngIf="showSearchSpinner"></mat-spinner>
-    <table *ngIf="showMoviesTable" mat-table [dataSource]="moviesList" class="movies-search-table">
-
-        <!--- Note that these columns can be defined in any order.
+    <table
+      *ngIf="showMoviesTable"
+      mat-table
+      [dataSource]="moviesList"
+      class="movies-search-table"
+    >
+      <!--- Note that these columns can be defined in any order.
               The actual rendered columns are set as a property on the row definition" -->
-      
-        <!-- Position Column -->
-        <ng-container matColumnDef="Poster">
-          <th mat-header-cell *matHeaderCellDef> Poster </th>
-          <td mat-cell *matCellDef="let element"> <img class="search-movie-poster" [src]="element.Poster" alt="Movie Poster">  </td>
-        </ng-container>
-      
-        <!-- Name Column -->
-        <ng-container matColumnDef="Title">
-          <th mat-header-cell *matHeaderCellDef> Title </th>
-          <td mat-cell *matCellDef="let element"> {{element.Title}} </td>
-        </ng-container>
-      
-        <!-- Weight Column -->
-        <ng-container matColumnDef="Year">
-          <th mat-header-cell *matHeaderCellDef> Year </th>
-          <td mat-cell *matCellDef="let element"> {{element.Year | removeTrailingDashes}} </td>
-        </ng-container>
-      
-        <!-- Symbol Column -->
-        <ng-container matColumnDef="Type">
-          <th mat-header-cell *matHeaderCellDef> Type </th>
-          <td mat-cell *matCellDef="let element"> {{element.Type | capitalizeFirst}} </td>
-        </ng-container>
 
-        <!-- Symbol Column -->
-        <ng-container matColumnDef="Action">
-          <th mat-header-cell *matHeaderCellDef> </th>
-          <td mat-cell *matCellDef="let element"> 
-            <svg class="add-icon" (click)="$event.stopPropagation();addToCollection(element);" height="24px" viewBox="0 -960 960 960" width="24px"><path d="M440-280h80v-160h160v-80H520v-160h-80v160H280v80h160v160ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/></svg> </td>
-        </ng-container>
-      
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr class="movie-row" (click)="goToMovie(row)" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
-    </div>
+      <!-- Position Column -->
+      <ng-container matColumnDef="Poster">
+        <th mat-header-cell *matHeaderCellDef>Poster</th>
+        <td mat-cell *matCellDef="let element">
+          <img
+            class="search-movie-poster"
+            [src]="element.Poster"
+            alt="Movie Poster"
+          />
+        </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="Title">
+        <th mat-header-cell *matHeaderCellDef>Title</th>
+        <td mat-cell *matCellDef="let element">{{ element.Title }}</td>
+      </ng-container>
+
+      <!-- Weight Column -->
+      <ng-container matColumnDef="Year">
+        <th mat-header-cell *matHeaderCellDef>Year</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.Year | removeTrailingDashes }}
+        </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="Type">
+        <th mat-header-cell *matHeaderCellDef>Type</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.Type | capitalizeFirst }}
+        </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="Action">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element">
+          <svg
+            class="add-icon"
+            (click)="$event.stopPropagation(); addToCollection(element)"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+          >
+            <path
+              d="M440-280h80v-160h160v-80H520v-160h-80v160H280v80h160v160ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"
+            />
+          </svg>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr
+        class="movie-row"
+        (click)="goToMovie(row)"
+        mat-row
+        *matRowDef="let row; columns: displayedColumns"
+      ></tr>
+    </table>
+  </div>
 </div>
-<div *ngIf="isAddMovieModalOpen" (click)="isAddMovieModalOpen = false" class="backdrop"></div>
-<div *ngIf="isAddMovieModalOpen" class="add-movie-modal" (click)="$event.stopPropagation()">
-  <h3 mat-dialog-title>Add "{{movieInAddPopup?.Title}}" to Collection</h3>
+<div
+  *ngIf="isAddMovieModalOpen"
+  (click)="isAddMovieModalOpen = false"
+  class="backdrop"
+></div>
+<div
+  *ngIf="isAddMovieModalOpen"
+  class="add-movie-modal"
+  (click)="$event.stopPropagation()"
+>
+  <h3 mat-dialog-title>Add "{{ movieInAddPopup?.Title }}" to Collection</h3>
   <mat-dialog-content>
     <p>Collections:</p>
     <table>
       <tr *ngFor="let collection of collectionsList">
         <td>{{ collection }}</td>
         <td>
-          <input 
+          <input
             type="checkbox"
             [checked]="selectedCollections.includes(collection)"
             (change)="onCollectionCheckboxChange(collection, $event)"
@@ -64,16 +110,16 @@
       </tr>
       <tr>
         <td>
-          <input 
-            type="text" 
-            [(ngModel)]="newCollectionName" 
+          <input
+            type="text"
+            [(ngModel)]="newCollectionName"
             placeholder="New collection name"
           />
         </td>
         <td>
-          <input 
+          <input
             type="checkbox"
-            [disabled]="!newCollectionName?.trim()"
+            [disabled]="!newCollectionName.trim()"
             [checked]="selectedCollections.includes(newCollectionName)"
             (change)="onCollectionCheckboxChange(newCollectionName, $event)"
           />
@@ -82,8 +128,8 @@
     </table>
   </mat-dialog-content>
   <mat-dialog-actions>
-    <button 
-      class="add-to-collections-button" 
+    <button
+      class="add-to-collections-button"
       (click)="addToSelectedCollections()"
       [disabled]="!selectedCollections.length"
     >

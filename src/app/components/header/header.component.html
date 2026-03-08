@@ -1,11 +1,30 @@
-<mat-toolbar color="primary" style="background-color: #1877f2; color: #fff;">
-    <span style="font-size: 1.5rem; font-weight: bold;">MoviesDB</span>
-    <div class="nav-container">
-        <a class="nav-items" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }" routerLink="/">Home</a>
-        <a class="nav-items" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }" routerLink="/collections">Collections</a>
-    </div>
-    <span style="margin-left: auto;">
-        <button mat-button>Login</button>
-        <button mat-button>Sign Up</button>
-    </span>
+<mat-toolbar color="primary" style="background-color: #1877f2; color: #fff">
+  <span style="font-size: 1.5rem; font-weight: bold">MoviesDB</span>
+  <div class="nav-container">
+    <a
+      class="nav-items"
+      routerLinkActive="active-link"
+      [routerLinkActiveOptions]="{ exact: true }"
+      routerLink="/"
+      >Home</a
+    >
+    <a
+      class="nav-items"
+      routerLinkActive="active-link"
+      [routerLinkActiveOptions]="{ exact: true }"
+      routerLink="/collections"
+      >Collections</a
+    >
+  </div>
+  <span style="margin-left: auto; display: flex; gap: 8px">
+    <button mat-button *ngIf="!(isLoggedIn$ | async)" routerLink="/login">
+      Login
+    </button>
+    <button mat-button *ngIf="!(isLoggedIn$ | async)" routerLink="/register">
+      Sign Up
+    </button>
+    <button mat-button *ngIf="isLoggedIn$ | async" (click)="logout()">
+      Logout
+    </button>
+  </span>
 </mat-toolbar>
