@@ -1,5 +1,5 @@
 import { Component, inject , OnInit} from '@angular/core';
-
+import { KeyValuePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
@@ -11,6 +11,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   selector: 'home',
   imports: [
     FormsModule,
+    KeyValuePipe,
     HttpClientModule,
     MatTableModule,
     MatProgressSpinnerModule
