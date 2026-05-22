@@ -13,19 +13,26 @@ import { AuthService } from '../../auth.service';
     MatButtonModule,
     RouterLink,
     RouterModule,
-    AsyncPipe
-],
+    AsyncPipe,
+  ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent {
   readonly isLoggedIn$;
-
+  readonly currentUser$;
+  
   constructor(
     private authService: AuthService,
     private router: Router,
   ) {
     this.isLoggedIn$ = this.authService.isLoggedIn$;
+    this.currentUser$ = this.authService.currentUser$;
+  }
+  
+  getCollectionsLink(user: any): string {
+    console.log('Current user in header:', user);
+    return user?.username ? `/collections/${user.username}` : '/login';
   }
 
   logout(): void {

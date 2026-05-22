@@ -44,6 +44,11 @@ export class AuthService {
   private readonly tokenStorageKey = 'moviesDbAuthToken';
   private readonly userStorageKey = 'moviesDbAuthUser';
   private readonly browser: boolean;
+  username: string = '';
+
+  saveData(value: string) {
+    this.username = value;
+  }
   private isLoggingOut = false;
 
   private readonly loggedInSubject = new BehaviorSubject<boolean>(false);

@@ -49,7 +49,7 @@ export class LoginComponent {
       })
       .subscribe({
         next: () => {
-          this.router.navigateByUrl('/');
+          this.router.navigateByUrl(`/collections/${this.username.trim()}`);
         },
         error: (err) => {
           this.errorMessage =

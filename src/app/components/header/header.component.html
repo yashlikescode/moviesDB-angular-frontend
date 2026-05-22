@@ -9,12 +9,13 @@
       >Home</a
       >
       <a
-        class="nav-items"
-        routerLinkActive="active-link"
-        [routerLinkActiveOptions]="{ exact: true }"
-        routerLink="/collections"
-        >Collections</a
-        >
+  class="nav-items"
+  routerLinkActive="active-link"
+  [routerLinkActiveOptions]="{ exact: true }"
+  [routerLink]="getCollectionsLink(currentUser$ | async)"
+>
+  Collections
+</a>
       </div>
       <span style="margin-left: auto; display: flex; gap: 8px">
         @if (!(isLoggedIn$ | async)) {

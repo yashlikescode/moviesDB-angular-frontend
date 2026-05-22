@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,7 @@ import { Observable } from 'rxjs';
 export class CollectionService {
   constructor(private http: HttpClient) {}
 
-  private baseUrl = 'https://node-backend-7q02.onrender.com/api';
+  private baseUrl = `${environment.nodeServerUrl}api`;
 
   getCollectionsListById(id: string): Observable<any> {
     return this.http.get(`${this.baseUrl}/userCollectionsList/${id}`);
