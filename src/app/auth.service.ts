@@ -40,7 +40,8 @@ interface LoginResponse {
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly baseUrl = 'http://127.0.0.1:8000/userAuth';
+  private readonly baseUrl =
+    'https://django-backend-vl0a.onrender.com/userAuth';
   private readonly tokenStorageKey = 'moviesDbAuthToken';
   private readonly userStorageKey = 'moviesDbAuthUser';
   private readonly browser: boolean;
