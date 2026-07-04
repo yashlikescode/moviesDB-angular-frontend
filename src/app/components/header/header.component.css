@@ -5,15 +5,13 @@
   z-index: 20;
 }
 
-.topbar {
-  width: min(1180px, calc(100vw - 2rem));
-  margin: 0.75rem auto 0;
-  border-radius: 1.25rem;
-  padding: 0.85rem 1rem;
-  background: rgba(10, 45, 66, 0.92);
-  color: #f6fbfb;
-  box-shadow: 0 18px 40px rgba(10, 45, 66, 0.2);
-  backdrop-filter: blur(14px);
+.topbar[_ngcontent-ng-c761829838] {
+    padding: 0.85rem 3rem;
+    background: rgb(10 45 66 / 91%);
+    color: #f6fbfb;
+    box-shadow: 0 18px 40px rgba(10, 45, 66, 0.2);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
 }
 
 .brand {
@@ -60,7 +58,7 @@
   display: flex;
   align-items: center;
   gap: 0.35rem;
-  margin-left: 1.1rem;
+  margin-left: 5rem;
 }
 
 .primary-nav a,

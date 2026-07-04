@@ -65,7 +65,7 @@ img {
 .app-page {
   width: min(1180px, calc(100vw - 2rem));
   margin: 0 auto;
-  padding: 1.25rem 0 2.5rem;
+  padding: 1.25rem 0 1.5rem;
 }
 
 .mat-mdc-unelevated-button.mat-primary {
