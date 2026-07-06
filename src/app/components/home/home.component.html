@@ -3,7 +3,8 @@
     <p class="eyebrow">Search titles</p>
     <h1>Find Films and Shows</h1>
     <p class="lead">
-      Search by title, review details in a responsive layout, and add anything to one or more collections with a single action.
+      Search by title, review details in a responsive layout, and add anything
+      to one or more collections with a single action.
     </p>
     <div class="hero-pills">
       <span>Search Movies</span>
@@ -53,7 +54,11 @@
           <div class="poster-wrap">
             <img
               class="search-movie-poster"
-              [src]="movie.Poster && movie.Poster !== 'N/A' ? movie.Poster : 'https://www.content.numetro.co.za/ui_images/no_poster.png'"
+              [src]="
+                movie.Poster && movie.Poster !== 'N/A'
+                  ? movie.Poster
+                  : 'https://www.content.numetro.co.za/ui_images/no_poster.png'
+              "
               [alt]="movie.Title"
             />
           </div>
@@ -72,7 +77,23 @@
           </div>
         </mat-card>
       }
+
     </div>
+    <div class="load-more">
+      <button
+        mat-stroked-button
+        type="button"
+        (click)="$event.stopPropagation(); onLoadMore()"
+        [disabled]="showLoadingMoreSpinner"
+      >
+      @if(showLoadingMoreSpinner) {
+        <mat-spinner diameter="36"></mat-spinner>
+      } @else {
+        Load More
+      }
+      </button>
+    </div>
+      
   } @else if (!showSearchSpinner && searchTerm.trim()) {
     <mat-card class="empty-state">
       <h3>No results yet</h3>

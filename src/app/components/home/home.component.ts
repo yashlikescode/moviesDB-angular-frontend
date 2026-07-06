@@ -8,7 +8,10 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import {
+  MatSnackBar,
+  MatSnackBarVerticalPosition,
+} from '@angular/material/snack-bar';
 import { forkJoin, of } from 'rxjs';
 import { catchError, take } from 'rxjs/operators';
 import { AuthService } from '../../auth.service';
@@ -42,10 +45,13 @@ interface Row {
 })
 export class HomeComponent implements OnInit {
   moviesList: Movie[] = [];
-  totalRecords = 0;
-  showMoviesTable = false;
-  showSearchSpinner = false;
-  searchTerm = '';
+  totalRecords: number = 0;
+  showMoviesTable: boolean = false;
+  showSearchSpinner: boolean = false;
+  searchTerm: string = '';
+  pageNumber: number = 1;
+  isLoadingMore: boolean = false;
+  showLoadingMoreSpinner: boolean = false;
 
   private _snackBar = inject(MatSnackBar);
   private dialog = inject(MatDialog);
@@ -96,13 +102,15 @@ export class HomeComponent implements OnInit {
             autoFocus: false,
           });
 
-          dialogRef.afterClosed().subscribe((selectedCollections?: string[]) => {
-            if (!selectedCollections?.length) {
-              return;
-            }
+          dialogRef
+            .afterClosed()
+            .subscribe((selectedCollections?: string[]) => {
+              if (!selectedCollections?.length) {
+                return;
+              }
 
-            this.addMovieToCollections(userId, movie, selectedCollections);
-          });
+              this.addMovieToCollections(userId, movie, selectedCollections);
+            });
         },
         error: (err) => {
           console.error('Error fetching user collections:', err);
@@ -132,9 +140,7 @@ export class HomeComponent implements OnInit {
     const requests = selectedCollections.map((collectionName) =>
       this.collectionService
         .addMovieToCollection(userId, collectionName, moviePayload)
-        .pipe(
-          catchError((err) => of({ error: true, collectionName, err })),
-        ),
+        .pipe(catchError((err) => of({ error: true, collectionName, err }))),
     );
 
     forkJoin(requests).subscribe({
@@ -177,10 +183,10 @@ export class HomeComponent implements OnInit {
   onSubmitSearch(): void {
     this.showMoviesTable = false;
     this.showSearchSpinner = true;
-
+    this.pageNumber = 1;
     this.http
       .get<any>(`${environment.nodeServerUrl}api/movie-search-by-name`, {
-        params: { s: this.searchTerm, page: '1' },
+        params: { s: this.searchTerm, page: this.pageNumber.toString() },
       })
       .subscribe({
         next: (data) => {
@@ -211,6 +217,38 @@ export class HomeComponent implements OnInit {
       });
   }
 
+  onLoadMore(): void {
+    this.showLoadingMoreSpinner = true;
+    this.pageNumber++;
+    this.http
+      .get<any>(`${environment.nodeServerUrl}api/movie-search-by-name`, {
+        params: { s: this.searchTerm, page: this.pageNumber.toString() },
+      })
+      .subscribe({
+        next: (data) => {
+          this.showLoadingMoreSpinner = false;
+
+          if (
+            data['Response'] === 'False' &&
+            data['Error'] === 'Too many results.'
+          ) {
+            this.openSnackBar();
+            return;
+          }
+
+          if (data['Response'] === 'True' && Number(data['totalResults']) > 0) {
+            this.moviesList.push(...data['Search']);
+            this.totalRecords = Number(data['totalResults']);
+            return;
+          }
+        },
+        error: (err) => {
+          console.error('Error occurred:', err);
+          this.showLoadingMoreSpinner = false;
+        },
+      });
+  }
+
   openSnackBar(): void {
     this._snackBar.openFromComponent(PizzaPartyComponent, {
       duration: this.durationInSeconds * 1000,
@@ -224,7 +262,8 @@ export class HomeComponent implements OnInit {
 @Component({
   selector: 'snack-bar-component-example-snack',
   standalone: true,
-  template: '<span class="example-pizza-party">Too many results. Try a more specific search.</span>',
+  template:
+    '<span class="example-pizza-party">Too many results. Try a more specific search.</span>',
   styles: `
     .example-pizza-party {
       color: white;

@@ -210,6 +210,12 @@
   color: #123242;
 }
 
+.load-more {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
 @media (max-width: 960px) {
   .hero {
     grid-template-columns: 1fr;
