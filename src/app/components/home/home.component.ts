@@ -68,14 +68,24 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const savedValue = localStorage.getItem('searchTerm');
-    if (savedValue !== null) {
-      this.searchTerm = savedValue;
-    }
+    this.searchTerm = localStorage.getItem('searchTerm') || '';
+    this.pageNumber = localStorage.getItem('pageNumber')
+      ? parseInt(localStorage.getItem('pageNumber')!, 10)
+      : 1;
+    this.totalRecords = localStorage.getItem('totalRecords')
+      ? parseInt(localStorage.getItem('totalRecords')!, 10)
+      : 0;
+    this.moviesList = localStorage.getItem('moviesList')
+      ? JSON.parse(localStorage.getItem('moviesList')!)
+      : [];
+    this.showMoviesTable = this.moviesList.length > 0;
   }
 
   setSearchTerm(): void {
     localStorage.setItem('searchTerm', this.searchTerm);
+    localStorage.setItem('pageNumber', this.pageNumber.toString());
+    localStorage.setItem('totalRecords', this.totalRecords.toString());
+    localStorage.setItem('moviesList', JSON.stringify(this.moviesList));
   }
 
   goToMovie(row: Movie): void {
@@ -204,6 +214,7 @@ export class HomeComponent implements OnInit {
             this.moviesList = data['Search'];
             this.totalRecords = Number(data['totalResults']);
             this.showMoviesTable = true;
+            this.setSearchTerm();
             return;
           }
 
@@ -239,6 +250,7 @@ export class HomeComponent implements OnInit {
           if (data['Response'] === 'True' && Number(data['totalResults']) > 0) {
             this.moviesList.push(...data['Search']);
             this.totalRecords = Number(data['totalResults']);
+            this.setSearchTerm();
             return;
           }
         },
