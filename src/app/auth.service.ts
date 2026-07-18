@@ -22,7 +22,7 @@ interface SignupPayload {
 
 interface LoginPayload {
   username: string;
-  password: string;
+  otp: string;
 }
 
 interface UserProfile {
@@ -88,8 +88,13 @@ export class AuthService {
       .pipe(map((response) => response.exists));
   }
 
-  sendOtp(email: string): Observable<unknown> {
-    return this.http.post(`${this.baseUrl}/send-otp/`, { email });
+  sendOtp(
+    identifier: string,
+    type: 'email' | 'username' = 'email',
+  ): Observable<unknown> {
+    const payload =
+      type === 'email' ? { email: identifier } : { username: identifier };
+    return this.http.post(`${this.baseUrl}/send-otp/`, payload);
   }
 
   login(payload: LoginPayload): Observable<LoginResponse> {

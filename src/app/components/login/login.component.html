@@ -3,9 +3,7 @@
     <div class="auth-copy">
       <p class="eyebrow">Welcome back</p>
       <h1>Where your watchlist lives.</h1>
-      <p>
-        Curate. Share. Discover what's next.
-      </p>
+      <p>Curate. Share. Discover what's next.</p>
       <ul>
         <li>Built for people who actually watch movies</li>
         <li>Turn your taste into a list worth sharing</li>
@@ -24,34 +22,55 @@
       }
 
       <form (ngSubmit)="onSubmit()" class="auth-form">
+        <div class="username-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Username</mat-label>
+            <input
+              matInput
+              id="username"
+              name="username"
+              type="text"
+              [(ngModel)]="username"
+              placeholder="john"
+              required
+            />
+          </mat-form-field>
+
+          <button
+            mat-flat-button
+            color="primary"
+            type="button"
+            class="otp-action-button"
+            (click)="onSendOtp()"
+          >
+            {{ otpSent ? "Resend OTP" : "Send OTP" }}
+          </button>
+        </div>
+
+        @if (otpSent && otpRemainingSeconds > 0) {
+          <p class="hint">OTP expires in {{ otpExpirationText }}</p>
+        }
+
         <mat-form-field appearance="outline">
-          <mat-label>Username</mat-label>
+          <mat-label>OTP</mat-label>
           <input
             matInput
-            id="username"
-            name="username"
+            id="otp"
+            name="otp"
             type="text"
-            [(ngModel)]="username"
-            placeholder="john"
+            [(ngModel)]="otp"
+            placeholder="Enter OTP"
             required
           />
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Password</mat-label>
-          <input
-            matInput
-            id="password"
-            name="password"
-            type="password"
-            [(ngModel)]="password"
-            placeholder="Enter your password"
-            required
-          />
-        </mat-form-field>
-
-        <button mat-flat-button color="primary" type="submit" [disabled]="isSubmitting">
-          {{ isSubmitting ? 'Logging in...' : 'Login' }}
+        <button
+          mat-flat-button
+          color="primary"
+          type="submit"
+          [disabled]="isSubmitting"
+        >
+          {{ isSubmitting ? "Logging in..." : "Login" }}
         </button>
       </form>
 

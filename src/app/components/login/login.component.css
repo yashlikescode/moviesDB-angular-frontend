@@ -1,5 +1,3 @@
-
-
 .auth-shell {
   padding-top: 1rem;
 }
@@ -71,6 +69,33 @@
 .auth-form mat-form-field,
 .auth-form button {
   width: 100%;
+}
+
+.username-row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-end;
+}
+
+.username-row mat-form-field {
+  flex: 1;
+  min-width: 0;
+}
+
+.otp-action-button {
+  min-width: 6.5rem;
+  max-width: 8rem;
+  width: auto;
+  height: 56px;
+  line-height: 56px;
+  padding: 0 0.8rem;
+}
+
+.hint {
+  margin: -0.35rem 0 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #49636f;
 }
 
 .error,
