@@ -98,7 +98,7 @@ export class HomeComponent implements OnInit {
     this.currentUser$.pipe(take(1)).subscribe((user: any) => {
       const userId = user?.username || '1111';
 
-      this.collectionService.getCollectionsListById(userId).subscribe({
+      this.collectionService.getCollectionsList().subscribe({
         next: (data: { rows: Row[] }) => {
           const dialogData: AddMovieDialogData = {
             movie,

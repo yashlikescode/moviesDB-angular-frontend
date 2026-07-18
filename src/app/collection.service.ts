@@ -1,18 +1,24 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { environment } from '../environments/environment';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CollectionService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   private baseUrl = `${environment.nodeServerUrl}api`;
 
-  getCollectionsListById(id: string): Observable<any> {
-    return this.http.get(`${this.baseUrl}/userCollectionsList/${id}`);
+  // fetch collections for the currently-authenticated user
+  getCollectionsList(): Observable<any> {
+    const username = this.authService.getUsername();
+    if (!username) {
+      return throwError(() => new Error('No username available in AuthService'));
+    }
+    return this.http.get(`${this.baseUrl}/userCollectionsList/${username}`);
   }
 
     addMovieToCollection(userId: string, collectionName: string, movie: any): Observable<any> {

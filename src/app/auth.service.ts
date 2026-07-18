@@ -156,6 +156,8 @@ export class AuthService {
       localStorage.setItem(this.tokenStorageKey, token);
       localStorage.setItem(this.userStorageKey, JSON.stringify(user));
     }
+    // keep a quick-access copy of the username for other services
+    this.username = user.username;
     this.userSubject.next(user);
     this.loggedInSubject.next(true);
   }
@@ -165,6 +167,7 @@ export class AuthService {
       localStorage.removeItem(this.tokenStorageKey);
       localStorage.removeItem(this.userStorageKey);
     }
+    this.username = '';
     this.userSubject.next(null);
     this.loggedInSubject.next(false);
   }
@@ -186,11 +189,17 @@ export class AuthService {
 
     if (userJson) {
       try {
-        this.userSubject.next(JSON.parse(userJson) as UserProfile);
+        const user = JSON.parse(userJson) as UserProfile;
+        this.userSubject.next(user);
+        this.username = user.username || '';
       } catch {
         this.userSubject.next(null);
       }
     }
+  }
+
+  getUsername(): string {
+    return this.username;
   }
 
   private isTokenExpired(token: string): boolean {

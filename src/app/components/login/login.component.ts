@@ -101,7 +101,8 @@ export class LoginComponent implements OnDestroy {
       })
       .subscribe({
         next: () => {
-          this.router.navigateByUrl(`/collections/${this.username.trim()}`);
+          const username = this.authService.getUsername() || this.username.trim();
+          this.router.navigateByUrl(`/collections/${username}`);
         },
         error: (err) => {
           this.errorMessage =
